@@ -99,7 +99,7 @@ body::-webkit-scrollbar-track {
   content: "";
   position: absolute;
   inset: -10%;
-  background-image: url("/image/banner1.png");
+  background-image: url("/image/banner1.svg");
   background-size: cover;
   background-position: center;
   filter: blur(18px);

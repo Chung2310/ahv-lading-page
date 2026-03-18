@@ -14,7 +14,7 @@ export const Header: React.FC = () => {
           aria-label="AHV Holding - Trang chủ"
         >
           <img
-            src="/image/logo.jpg"
+            src="/image/logo.svg"
             alt="Logo AHV Holding"
             className="h-9 w-9 rounded-xl object-contain"
           />
