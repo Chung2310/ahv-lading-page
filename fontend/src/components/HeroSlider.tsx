@@ -7,21 +7,21 @@ const slides = [
     title: "Giải pháp công nghệ & dữ liệu cho doanh nghiệp",
     subtitle: "Tăng tốc tăng trưởng với nền tảng AI, automation và hệ sinh thái đối tác của AHV Holding.",
     badge: "AHV Holding",
-    image: "/image/banner1.jpg",
+    image: "/image/banner1.svg",
   },
   {
     id: 2,
     title: "Xây hệ thống tăng trưởng bền vững",
     subtitle: "Kết nối marketing, sale, vận hành và data thành một bức tranh thống nhất, đo lường được.",
     badge: "Tăng trưởng bền vững",
-    image: "/image/banner2.jpg",
+    image: "/image/banner2.svg",
   },
   {
     id: 3,
     title: "Đồng hành như một bộ phận nội bộ",
     subtitle: "Tư duy đối tác dài hạn, chia sẻ rủi ro và cùng cam kết theo KPI tăng trưởng.",
     badge: "Đồng hành dài hạn",
-    image: "/image/banner3.jpg",
+    image: "/image/banner3.svg",
   },
 ];
 
@@ -43,7 +43,7 @@ export const HeroSlider: React.FC = () => {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className={`relative flex h-screen snap-start items-center overflow-hidden border-b border-slate-200 transition-all duration-700 ease-out ${animationClass}`}
+      className={`relative overflow-hidden border-b border-slate-200 transition-all duration-700 ease-out ${animationClass}`}
     >
       {/* Ảnh banner làm background */}
       <div className="absolute inset-0">

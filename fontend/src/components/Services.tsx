@@ -29,9 +29,9 @@ export const Services: React.FC = () => {
     <section
       id="services"
       ref={ref as React.RefObject<HTMLElement>}
-      className={`flex h-screen snap-start items-start border-b border-slate-200 bg-white transition-all duration-700 ease-out ${animationClass}`}
+      className={`border-b border-slate-200 bg-white transition-all duration-700 ease-out ${animationClass}`}
     >
-      <div className="mx-auto flex h-full max-w-6xl flex-col px-4 py-10 md:py-16">
+      <div className="mx-auto flex max-w-6xl flex-col px-4 py-10 md:py-16">
         <div className="flex flex-col items-start gap-3 md:gap-4">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-sky-700">
             Solutions &amp; Services
@@ -90,21 +90,17 @@ export const Services: React.FC = () => {
                 </article>
               );
             })}
-          {!loading && !fields.length && !error && (
-            <>
-              <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm hover:shadow-lg transition">
-                <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
-                  <span className="text-lg">🤖</span>
-                </div>
-                <h3 className="text-sm font-semibold text-slate-900 sm:text-base">AI Solutions</h3>
-                <p className="mt-2 text-sm text-slate-600">
-                  Phát triển nền tảng trí tuệ nhân tạo cho phân tích hành vi khách hàng, chấm điểm
-                  lead, dự đoán doanh thu và tối ưu chiến dịch.
-                </p>
-              </article>
-            </>
-          )}
         </div>
+        {!loading && !fields.length && !error && (
+          <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center">
+            <p className="text-sm font-medium text-slate-700">
+              Chưa có dữ liệu “lĩnh vực hoạt động” từ API.
+            </p>
+            <p className="mt-1 text-xs text-slate-500">
+              Vui lòng thêm dữ liệu ở backend hoặc kiểm tra lại endpoint `/api/v1/operating-fields`.
+            </p>
+          </div>
+        )}
         {error && (
           <p className="mt-4 text-xs text-red-500">{error}</p>
         )}

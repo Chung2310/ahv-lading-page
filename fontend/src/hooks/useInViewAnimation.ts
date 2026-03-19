@@ -10,7 +10,12 @@ export const useInViewAnimation = (options?: IntersectionObserverInit) => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setInView(entry.isIntersecting);
+        // Stabilize around the threshold to avoid flicker/re-render loops.
+        // Using intersectionRatio + only updating state on change prevents rapid toggling.
+        const threshold =
+          typeof (options as any)?.threshold === "number" ? ((options as any).threshold as number) : 0.3;
+        const next = entry.isIntersecting && entry.intersectionRatio >= threshold;
+        setInView((prev) => (prev === next ? prev : next));
       },
       { threshold: 0.3, ...(options || {}) }
     );

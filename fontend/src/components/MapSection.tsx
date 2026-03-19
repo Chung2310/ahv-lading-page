@@ -8,7 +8,7 @@ export const MapSection: React.FC = () => {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className={`flex h-screen snap-start items-center border-t border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
+      className={`border-t border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
     >
       <div className="mx-auto max-w-6xl px-4 py-16 md:py-20">
         <div className="grid gap-8 md:grid-cols-[0.9fr,1.1fr] md:items-start">

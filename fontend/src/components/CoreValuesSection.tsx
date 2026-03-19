@@ -28,9 +28,9 @@ export const CoreValuesSection: React.FC = () => {
   return (
     <section
       ref={ref as React.RefObject<HTMLElement>}
-      className={`flex h-screen snap-start items-center border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
+      className={`border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
     >
-      <div className="mx-auto flex h-full max-w-6xl flex-col px-4 py-10 md:py-16">
+      <div className="mx-auto flex max-w-6xl flex-col px-4 py-10 md:py-16">
         <div className="flex flex-col gap-3 md:gap-4">
           <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-sky-700">
             Core Values

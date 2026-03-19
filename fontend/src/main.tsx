@@ -13,6 +13,8 @@ import { ProjectsPage } from "./pages/ProjectsPage";
 import { RecruitmentPage } from "./pages/RecruitmentPage";
 import { ContactPage } from "./pages/ContactPage";
 import { PartnersPage } from "./pages/PartnersPage";
+import { ColorCodePage } from "./pages/ColorCodePage";
+import { NewsDetailPage } from "./pages/NewsDetailPage";
 
 const Root = () => (
   <ToastProvider>
@@ -23,11 +25,14 @@ const Root = () => (
         <Route path="/" element={<PublicLayout />}>
           <Route index element={<HomePage />} />
           <Route path="tin-tuc" element={<NewsPage />} />
+          <Route path="tin-tuc/:id" element={<NewsDetailPage />} />
           <Route path="dich-vu" element={<ServicesPage />} />
           <Route path="du-an" element={<ProjectsPage />} />
           <Route path="tuyen-dung" element={<RecruitmentPage />} />
-        <Route path="doi-tac" element={<PartnersPage />} />
+          <Route path="doi-tac" element={<PartnersPage />} />
           <Route path="lien-he" element={<ContactPage />} />
+          <Route path="color-code/:hex" element={<ColorCodePage />} />
+          <Route path="color-code" element={<ColorCodePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

@@ -1,4 +1,6 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5005/api/v1";
+// Default backend prefix is /api/v1 (can override via VITE_API_BASE_URL).
+// In dev, keep it relative (e.g. "/api/v1") to use Vite proxy and avoid CORS.
+const BASE_URL = (import.meta.env.VITE_API_BASE_URL?.trim() || "/api/v1").replace(/\/+$/, "");
 
 // ==== Common types ====
 
@@ -173,6 +175,14 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return (await res.json()) as T;
 }
 
+function buildUrl(pathname: string) {
+  const base = BASE_URL || "";
+  const full = `${base}${pathname}`;
+  // If BASE_URL is relative (e.g. "/api/v1"), URL() needs an absolute base.
+  if (/^https?:\/\//i.test(full)) return new URL(full);
+  return new URL(full, window.location.origin);
+}
+
 // Helper để bóc danh sách từ nhiều format khác nhau của backend
 function extractList<T = unknown>(raw: any): T[] {
   if (!raw) return [];
@@ -191,13 +201,28 @@ function extractList<T = unknown>(raw: any): T[] {
   return [];
 }
 
+function extractItem<T = unknown>(raw: any): T {
+  if (!raw) return raw as T;
+  if (raw.data && typeof raw.data === "object") {
+    // common: { data: {...} } or { data: { item: {...} } }
+    const d = raw.data;
+    if (d && typeof d === "object" && !Array.isArray(d)) {
+      if (d.item && typeof d.item === "object") return d.item as T;
+      if (d.data && typeof d.data === "object") return d.data as T;
+      return d as T;
+    }
+  }
+  if (raw.item && typeof raw.item === "object") return raw.item as T;
+  return raw as T;
+}
+
 // ==== Public fetch APIs cho landing ====
 
 export async function fetchPosts(params?: {
   page?: number;
   limit?: number;
 }): Promise<Post[]> {
-  const url = new URL(`${BASE_URL}/posts`);
+  const url = buildUrl("/posts");
   if (params?.page) url.searchParams.set("page", String(params.page));
   if (params?.limit) url.searchParams.set("limit", String(params.limit));
 
@@ -514,7 +539,7 @@ export async function fetchJobs(params?: {
   page?: number;
   limit?: number;
 }): Promise<JobDescription[]> {
-  const url = new URL(`${BASE_URL}/jds`);
+  const url = buildUrl("/jds");
   if (params?.page) url.searchParams.set("page", String(params.page));
   if (params?.limit) url.searchParams.set("limit", String(params.limit));
 
@@ -700,7 +725,8 @@ export async function getPost(id: string): Promise<Post> {
       ...authHeaders(),
     },
   });
-  return handleResponse<Post>(res);
+  const raw = await handleResponse<any>(res);
+  return extractItem<Post>(raw);
 }
 
 // ==== CRUD JDs cho Admin ====
@@ -751,7 +777,8 @@ export async function getJob(id: string): Promise<JobDescription> {
       ...authHeaders(),
     },
   });
-  return handleResponse<JobDescription>(res);
+  const raw = await handleResponse<any>(res);
+  return extractItem<JobDescription>(raw);
 }
 
 // ==== Tickets cho Admin ====
@@ -781,7 +808,8 @@ export async function getTicket(id: string): Promise<Ticket> {
       ...authHeaders(),
     },
   });
-  return handleResponse<Ticket>(res);
+  const raw = await handleResponse<any>(res);
+  return extractItem<Ticket>(raw);
 }
 
 export async function updateTicket(
@@ -839,7 +867,8 @@ export async function getCv(id: string): Promise<Cv> {
       ...authHeaders(),
     },
   });
-  return handleResponse<Cv>(res);
+  const raw = await handleResponse<any>(res);
+  return extractItem<Cv>(raw);
 }
 
 export async function updateCv(

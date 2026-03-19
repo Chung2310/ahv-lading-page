@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createCv, JobDescription, fetchJobs } from "../lib/api";
 import { notifyError, notifySuccess } from "../lib/notify";
+import { useInViewAnimation } from "../hooks/useInViewAnimation";
 
 const UploadCvForJobPublic: React.FC<{ job: JobDescription; onBack: () => void }> = ({
   job,
@@ -127,6 +128,7 @@ export const Recruitment: React.FC<{ limit?: number; showApiNote?: boolean }> = 
   limit = 3,
   showApiNote = true,
 }) => {
+  const { ref, animationClass } = useInViewAnimation();
   const [jobs, setJobs] = useState<JobDescription[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -160,7 +162,8 @@ export const Recruitment: React.FC<{ limit?: number; showApiNote?: boolean }> = 
   return (
     <section
       id="careers"
-      className="flex h-screen snap-start items-center overflow-y-auto border-b border-slate-200 bg-slate-50"
+      ref={ref as React.RefObject<HTMLElement>}
+      className={`border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
     >
       <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -175,7 +178,6 @@ export const Recruitment: React.FC<{ limit?: number; showApiNote?: boolean }> = 
           </div>
           {showApiNote && (
             <p className="text-xs text-slate-500 md:text-right">
-              Dữ liệu vị trí tuyển dụng được lấy động từ API backend (`/jds`).
             </p>
           )}
         </div>
@@ -272,50 +274,16 @@ export const Recruitment: React.FC<{ limit?: number; showApiNote?: boolean }> = 
                   </button>
                 </article>
               ))
-              : (
-                // Fallback nội dung tĩnh khi chưa có dữ liệu
-                <>
-                  <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
-                      Growth &amp; Strategy
-                    </p>
-                    <h3 className="mt-2 text-sm font-semibold text-slate-900">
-                      Growth Strategist (Middle/Senior)
-                    </h3>
-                    <p className="mt-2 text-sm text-slate-600">
-                      Làm việc trực tiếp với CEO/Founder khách hàng để thiết kế chiến lược tăng trưởng,
-                      kết nối marketing – sale – vận hành.
-                    </p>
-                    <p className="mt-3 text-xs text-slate-500">Hà Nội / TP.HCM · Hybrid</p>
-                  </article>
-                  <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
-                      Product &amp; Data
-                    </p>
-                    <h3 className="mt-2 text-sm font-semibold text-slate-900">
-                      Product Owner – Martech/CRM
-                    </h3>
-                    <p className="mt-2 text-sm text-slate-600">
-                      Phụ trách xây dựng và tối ưu các sản phẩm nội bộ về automation, CRM, data platform
-                      phục vụ nhiều ngành khác nhau.
-                    </p>
-                    <p className="mt-3 text-xs text-slate-500">Hà Nội · Full-time</p>
-                  </article>
-                  <article className="flex flex-col rounded-2xl border border-slate-800 bg-slate-900/80 p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
-                      Engineering
-                    </p>
-                    <h3 className="mt-2 text-sm font-semibold text-slate-900">
-                      Fullstack Engineer (Node.js/React)
-                    </h3>
-                    <p className="mt-2 text-sm text-slate-600">
-                      Tham gia xây dựng nền tảng landing, CMS và hệ thống dữ liệu phục vụ hàng chục chiến
-                      dịch marketing và sales song song.
-                    </p>
-                    <p className="mt-3 text-xs text-slate-500">Remote · Full-time</p>
-                  </article>
-                </>
-              )}
+              : null}
+          </div>
+        )}
+
+        {!loading && !hasJobs && !error && !selectedJob && (
+          <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white/70 px-4 py-6 text-center">
+            <p className="text-sm font-medium text-slate-700">Chưa có vị trí tuyển dụng từ API.</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Vui lòng kiểm tra endpoint `/api/v1/jds` hoặc thêm dữ liệu ở backend.
+            </p>
           </div>
         )}
 

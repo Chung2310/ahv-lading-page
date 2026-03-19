@@ -8,9 +8,9 @@ export const About: React.FC = () => {
     <section
       id="about"
       ref={ref as React.RefObject<HTMLElement>}
-      className={`flex h-screen snap-start items-center border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
+      className={`border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
     >
-      <div className="mx-auto flex h-full w-full max-w-6xl items-center px-4 py-16 md:py-20">
+      <div className="mx-auto flex w-full max-w-6xl items-center px-4 py-16 md:py-20">
         <div className="grid w-full gap-10 md:grid-cols-[1.1fr,0.9fr] md:items-center">
           {/* Cột nội dung bên trái */}
           <div>

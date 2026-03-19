@@ -1,7 +1,9 @@
 import React, { FormEvent, useState } from "react";
 import { createTicket } from "../lib/api";
+import { useInViewAnimation } from "../hooks/useInViewAnimation";
 
 export const ContactSection: React.FC = () => {
+  const { ref, animationClass } = useInViewAnimation();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +42,8 @@ export const ContactSection: React.FC = () => {
   return (
     <section
       id="contact"
-      className="flex h-screen snap-start items-center overflow-y-auto border-b border-slate-200 bg-slate-50"
+      ref={ref as React.RefObject<HTMLElement>}
+      className={`border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
     >
       <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
         <div className="grid gap-10 md:grid-cols-[1.1fr,0.9fr] md:items-start">

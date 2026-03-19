@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { fetchPosts, Post } from "../lib/api";
+import { useInViewAnimation } from "../hooks/useInViewAnimation";
 
 export const Articles: React.FC<{ limit?: number; showApiNote?: boolean }> = ({
   limit = 3,
   showApiNote = true,
 }) => {
+  const { ref, animationClass } = useInViewAnimation();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +41,8 @@ export const Articles: React.FC<{ limit?: number; showApiNote?: boolean }> = ({
   return (
     <section
       id="articles"
-      className="flex h-screen snap-start items-center overflow-y-auto border-b border-slate-200 bg-slate-50"
+      ref={ref as React.RefObject<HTMLElement>}
+      className={`border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
     >
       <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -53,7 +57,6 @@ export const Articles: React.FC<{ limit?: number; showApiNote?: boolean }> = ({
           </div>
           {showApiNote && (
             <p className="text-xs text-slate-500 md:text-right">
-              Dữ liệu được lấy động từ API backend (`/posts`).
             </p>
           )}
         </div>
@@ -82,9 +85,10 @@ export const Articles: React.FC<{ limit?: number; showApiNote?: boolean }> = ({
               ))
             : hasPosts
             ? posts.map((post) => (
-                <article
+                <Link
                   key={post._id}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/5"
+                  to={`/tin-tuc/${post._id}`}
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ahv-primary focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50"
                 >
                   <div className="relative aspect-video w-full bg-slate-100">
                     {post.imageUrl && !imageErrorIds[post._id] ? (
@@ -121,53 +125,18 @@ export const Articles: React.FC<{ limit?: number; showApiNote?: boolean }> = ({
                     </h3>
                     <p className="mt-2 text-sm text-slate-600 line-clamp-4">{post.content}</p>
                   </div>
-                </article>
+                </Link>
               ))
-            : (
-                // Fallback khi không có dữ liệu từ API
-                <>
-                  {[
-                    {
-                      tag: "Chiến lược tăng trưởng",
-                      title: "5 bước xây dựng hệ thống lead vận hành bền vững cho SME",
-                      content:
-                        "Từ việc chuẩn hoá chân dung khách hàng đến thiết kế hành trình đa kênh và tiêu chuẩn bàn giao lead cho sale.",
-                    },
-                    {
-                      tag: "Data & Automation",
-                      title:
-                        "Kết nối marketing – CRM – call center: vì sao doanh nghiệp thường “đứt gãy” dữ liệu?",
-                      content:
-                        "Nhìn lại những điểm nghẽn phổ biến khi triển khai chuyển đổi số marketing & sale và cách AHV giải quyết.",
-                    },
-                    {
-                      tag: "Case study",
-                      title: "Từ “đoán mò” đến vận hành theo dữ liệu: câu chuyện một doanh nghiệp B2B",
-                      content:
-                        "Cách một doanh nghiệp B2B tái cấu trúc phễu lead, chuẩn hoá CRM và tăng trưởng doanh thu sau 6 tháng.",
-                    },
-                  ].map((x) => (
-                    <article
-                      key={x.title}
-                      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-900/5"
-                    >
-                      <div className="relative aspect-video w-full bg-gradient-to-br from-sky-50 via-white to-slate-100">
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/15 via-transparent to-transparent" />
-                      </div>
-                      <div className="flex flex-1 flex-col p-5">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-sky-700">
-                          {x.tag}
-                        </p>
-                        <h3 className="mt-2 text-sm font-semibold text-slate-900 line-clamp-2">
-                          {x.title}
-                        </h3>
-                        <p className="mt-2 text-sm text-slate-600 line-clamp-4">{x.content}</p>
-                      </div>
-                    </article>
-                  ))}
-                </>
-              )}
+            : null}
         </div>
+        {!loading && !hasPosts && !error && (
+          <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center">
+            <p className="text-sm font-medium text-slate-700">Chưa có bài viết nào từ API.</p>
+            <p className="mt-1 text-xs text-slate-500">
+              Vui lòng kiểm tra endpoint `/api/v1/posts` hoặc thêm dữ liệu ở backend.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

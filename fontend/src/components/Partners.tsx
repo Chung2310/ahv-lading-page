@@ -1,10 +1,13 @@
 import React from "react";
+import { useInViewAnimation } from "../hooks/useInViewAnimation";
 
 export const Partners: React.FC = () => {
+  const { ref, animationClass } = useInViewAnimation();
   return (
     <section
       id="partners"
-      className="flex h-screen snap-start items-center border-b border-slate-200 bg-white"
+      ref={ref as React.RefObject<HTMLElement>}
+      className={`border-b border-slate-200 bg-white transition-all duration-700 ease-out ${animationClass}`}
     >
       <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

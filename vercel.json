@@ -1,37 +1,30 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "fontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "fontend/dist"
-      }
+      "source": "/api/(.*)",
+      "destination": "/backend/src/app.ts"
     },
     {
-      "src": "backend/api/index.ts",
-      "use": "@vercel/node"
+      "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp|json|txt|map))",
+      "destination": "/frontend/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/index.html"
     }
   ],
-  "routes": [
+  "builds": [
     {
-      "src": "/api/v1/(.*)",
-      "dest": "backend/api/index.ts"
+      "src": "backend/src/app.ts",
+      "use": "@vercel/node"
     },
     {
-      "src": "/api-docs(.*)",
-      "dest": "backend/api/index.ts"
-    },
-    {
-      "src": "/health",
-      "dest": "backend/api/index.ts"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "fontend/dist/index.html"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ]
 }

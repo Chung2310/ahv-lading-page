@@ -34,6 +34,12 @@ export const Projects: React.FC<{ variant?: "home" | "page" }> = ({ variant = "h
     return Array.from(set);
   }, [projects]);
 
+  const summary = useMemo(() => {
+    const projectCount = projects.length;
+    const industryCount = industries.length;
+    return { projectCount, industryCount };
+  }, [projects.length, industries.length]);
+
   const filteredProjects = useMemo(() => {
     if (selectedIndustry === "all") return projects;
     return projects.filter((p) => p.industry === selectedIndustry);
@@ -197,35 +203,26 @@ export const Projects: React.FC<{ variant?: "home" | "page" }> = ({ variant = "h
           </div>
         )}
 
-        <section className="mt-10 grid gap-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm sm:grid-cols-3">
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
-              Số lượng dự án
-            </p>
-            <p className="mt-1 text-xl font-semibold text-slate-900">
-              +120
-              <span className="ml-1 text-xs font-normal text-slate-500">dự án tư vấn</span>
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
-              Ngành nghề
-            </p>
-            <p className="mt-1 text-xl font-semibold text-slate-900">
-              15+
-              <span className="ml-1 text-xs font-normal text-slate-500">lĩnh vực khác nhau</span>
-            </p>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
-              Khách hàng quay lại
-            </p>
-            <p className="mt-1 text-xl font-semibold text-slate-900">
-              90%
-              <span className="ml-1 text-xs font-normal text-slate-500">tỉ lệ hợp tác lại</span>
-            </p>
-          </div>
-        </section>
+        {!loading && summary.projectCount > 0 && (
+          <section className="mt-10 grid gap-4 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm sm:grid-cols-2">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
+                Số lượng dự án
+              </p>
+              <p className="mt-1 text-xl font-semibold text-slate-900">
+                {summary.projectCount}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
+                Ngành nghề
+              </p>
+              <p className="mt-1 text-xl font-semibold text-slate-900">
+                {summary.industryCount}
+              </p>
+            </div>
+          </section>
+        )}
       </div>
   );
 
@@ -234,7 +231,7 @@ export const Projects: React.FC<{ variant?: "home" | "page" }> = ({ variant = "h
       <section
         id="projects"
         ref={ref as React.RefObject<HTMLElement>}
-        className={`flex h-screen snap-start items-center border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
+        className={`border-b border-slate-200 bg-slate-50 transition-all duration-700 ease-out ${animationClass}`}
       >
         {content}
       </section>
